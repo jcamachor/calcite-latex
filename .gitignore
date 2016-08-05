@@ -28,6 +28,8 @@
 *.out
 *.synctex.gz
 *.pdf
+*.fdb_latexmk 
+*.fls 
 *.texpadtmp/
 
 # Mac IDE files
