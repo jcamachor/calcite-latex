@@ -1,7 +1,16 @@
 \section{Introduction}
 \label{sec:intro}
 
-Some text.
+The challenge is not only the explosion of data size, but other factors like heterogeneity and velocity are decisive.
+In recent years there has been a Cambrian explosion in the number of data processing systems that deal with these challenges.
+While there might be differences in the processing capabilities of these systems, it is valuable to propose a common layer of abstraction or framework that can integrate and optimize with these systems.
+
+Examples:
+\begin{itemize}
+	\item Integrating in-memory data (and a programming language model like LINQ) with a database-like approach (based on relational algebra).
+	\item Hybrid queries (crossing multiple systems and memory).
+	\item Materialized views, especially for OLAP applications, and especially dynamic (i.e. caching query results or intermediate results, and disabled when segments are flushed out of memory).
+\end{itemize}
 
 \input{ss-vision}
 

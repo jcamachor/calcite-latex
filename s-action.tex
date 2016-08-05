@@ -1,6 +1,59 @@
 \section{Calcite in action}
 \label{sec:action}
 
-Some text.
+The best way to understand Calcite's capabilities is to review some of the systems that have been built using Calcite. Calcite's goal is to make it easier to build a DBMS, but as each DBMS is unique, each tends to use Calcite in its own particular way.
 
-\input{ss-interfaces}
+{\renewcommand{\tabcolsep}{2pt}
+\begin{table*}[th]
+\centering
+{\small\begin{tabular}{|c|c|c|c|c|c|c|c|c|} \hline
+\multirow{2}{*}{\textbf{Project}} & \multirow{2}{*}{\textbf{Frontend}} & \textbf{Avatica} & \textbf{SQL} & \textbf{SQL} & \textbf{Relational} & \multirow{2}{*}{\textbf{Adapters}} & \multirow{2}{*}{\textbf{Engine}} & \textbf{Use of} \\
+ & & \textbf{JDBC} & \textbf{Parser} & \textbf{Validator} & \textbf{Algebra} & & & \textbf{Calcite} \\
+\hline
+\hline
+Hive  & Hive SQL   & \checkmark &   &   &   &   & Hive              & Library  \\\hline
+Kylin & SQL        & \checkmark & \checkmark & \checkmark &   &   & HBase, Enumerable & Library  \\\hline
+Drill & SQL        &   & \checkmark & \checkmark & \checkmark &   & Drill             & Library  \\\hline
+Qubole Quark & SQL &   & \checkmark & \checkmark & \checkmark &   & Hive, Presto      & Embedded \\\hline
+\multirow{2}{*}{Phoenix} & \multirow{2}{*}{SQL} & \multirow{2}{*}{\checkmark} & \multirow{2}{*}{\checkmark} & \multirow{2}{*}{\checkmark} & \multirow{2}{*}{\checkmark} &   & \multirow{2}{*}{HBase} & Local JDBC or \\
+ & & & & & & & & query server \\\hline
+Druid adapter & SQL or MDX & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & Druid, Enumerable & Local JDBC \\\hline
+Lingual & SQL      &   & \checkmark & \checkmark & \checkmark &   & Cascading & Local JDBC \\\hline
+\multirow{2}{*}{Calcite linq4j} & Java API &   &   & \multirow{2}{*}{\checkmark} &   &   & Enumerable & \multirow{2}{*}{API} \\
+ & (similar to LINQ) &   &   &   &   &   & or any adapter & \\\hline
+Samza SQL & Streaming SQL & \checkmark &   &   &   &   & Samza & Preprocessor \\\hline
+Calcite JDBC & SQL & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & Enumerable, any adapter & Local JDBC \\\hline
+\end{tabular}}
+\caption{List of systems and its interactions with Calcite.\label{tab:systems}}\JCR{We need to add refs for these systems}
+\end{table*}
+}
+
+Table~\ref{tab:systems} lists some databases that use Calcite. For each, we consider: Which components did it use? How did it customize those components for its purposes? Did it use Calcite as a library, or did they plug itself into Calcite as an adapter? What query language(s) did it provide? And what engine(s) does it use to execute queries?
+Apache Hive is a SQL interface to Apache Hadoop for ETL and interactive query, and uses Calcite for cost-based optimization. Hive uses its own SQL parser and validator (semantic analyzer) for its own dialect of SQL, translates to Calcite's logical algebra, which after optimization is translated to Hive's physical algebra and executed using Apache Tez or MapReduce.
+
+Apache Kylin provides fast execution for interactive OLAP-style SQL queries. It rewrites JOIN-GROUP-BY queries to use materialized views stored in Apache HBase.
+
+Qubole Quark provides fast execution for interactive SQL queries in Amazon Web Services. It dynamically builds materialized views, and uses 
+
+Drill - flexible schema
+
+SamzaSQL - streaming
+
+Druid - MDX+SQL front ends
+
+Cassandra - adapter - materialized views
+
+
+Calcite is packaged in various ways. Hive embeds Calcite as a library. Drill, Kylin and Phoenix use Calcite's JDBC driver (based on Avatica), each making minor modifications to the driver to, for instance, change the connect string from ``jdbc:calcite:'' to ``jdbc:phoenix:''. Phoenix includes Avatica's query server, so that thin clients can connect via an RPC protocol based on protobuf.
+
+\JH{The following terms should probably be converted into a reference on first use.
+Protobuf
+Apache Hive
+Apache Kylin
+Apache Drill
+Apache Hadoop
+Apache HBase
+Cascading Lingual http://www.cascading.org/projects/lingual/ 
+LINQ }
+
+%\input{ss-interfaces}
