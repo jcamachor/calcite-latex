@@ -1,4 +1,19 @@
 \subsection{Relational expressions}
 \label{subsec:relexprs}
 
-Some text.
+Relational algebra~\cite{DBLP:journals/cacm/Codd70} lies at the core of Calcite. In addition to the operators that can be used to express the most common data manipulation operations, such as \textit{filter}, \textit{project}, \textit{join} \etc , Calcite includes additional operators that meet different purposes, \eg represent easily complex operations or recognize optimization opportunities more efficiently.
+
+\JCR{Not sure about next paragraph, Julian needs to review}
+For instance, it has become common for OLAP, decision making, and streaming applications to use window definitions to express complex analytic functions.  Thus, Calcite introduces a \textit{window} operator that encapsulates the window definition, \ie upper and lower bound, partitioning \etc and the aggregate functions to execute on each window.
+
+%%
+\myparagraph{Traits.} Calcite does not use different entities to represent logical and physical operators. Instead, it describes the physical properties associated with an operator using \textit{traits}. These traits help the optimizer evaluate the cost of different alternative plans. It is important to note that if an operator property is considered a trait, changing its value does not change the logical expression being evaluated, \ie the rows produced by the given operator will still be the same.
+
+During optimization, Calcite will try to enforce certain traits on relational expressions, \eg the sort order of certain columns. Relational operators can implement a \textit{converter} interface that indicates how to convert the physical attribute of the expression from one value to another.
+
+Calcite includes common traits that describe the physical properties of the data produced by a relational expression, such as \textit{ordering}, \textit{grouping}, and \textit{partitioning}. Similar to~\cite{DBLP:conf/icde/ZhouLC10}, the optimizer can reason about these properties and exploit them to find plans that avoid unnecessary operations.
+
+In addition to these properties, one of the main features of Calcite is the \textit{calling convention} trait. Essentially, the trait represents the data processing system on which the expression will be be executed. Including the calling convention as a trait allows Calcite to meet its goal of optimizing transparently queries whose execution might span over different engines \ie the convention will be treated as any other physical property.
+
+\JCR{Could we envision a 'real-world' example here using different systems? I can create a figure. I think it would be valuable}
+

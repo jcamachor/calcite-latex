@@ -11,9 +11,9 @@ The best way to understand Calcite's capabilities is to review some of the syste
  & & \textbf{JDBC} & \textbf{Parser} & \textbf{Validator} & \textbf{Algebra} & & & \textbf{Calcite} \\
 \hline
 \hline
-Hive  & Hive SQL   & \checkmark &   &   &   &   & Hive              & Library  \\\hline
+Hive~\cite{website:Hive} & Hive SQL   & \checkmark &   &   &   &   & Hive              & Library  \\\hline
 Kylin & SQL        & \checkmark & \checkmark & \checkmark &   &   & HBase, Enumerable & Library  \\\hline
-Drill & SQL        &   & \checkmark & \checkmark & \checkmark &   & Drill             & Library  \\\hline
+Drill~\cite{website:Drill} & SQL        &   & \checkmark & \checkmark & \checkmark &   & Drill             & Library  \\\hline
 Qubole Quark & SQL &   & \checkmark & \checkmark & \checkmark &   & Hive, Presto      & Embedded \\\hline
 \multirow{2}{*}{Phoenix} & \multirow{2}{*}{SQL} & \multirow{2}{*}{\checkmark} & \multirow{2}{*}{\checkmark} & \multirow{2}{*}{\checkmark} & \multirow{2}{*}{\checkmark} &   & \multirow{2}{*}{HBase} & Local JDBC or \\
  & & & & & & & & query server \\\hline
@@ -24,7 +24,7 @@ Lingual & SQL      &   & \checkmark & \checkmark & \checkmark &   & Cascading & 
 Samza SQL & Streaming SQL & \checkmark &   &   &   &   & Samza & Preprocessor \\\hline
 Calcite JDBC & SQL & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & Enumerable, any adapter & Local JDBC \\\hline
 \end{tabular}}
-\caption{List of systems and its interactions with Calcite.\label{tab:systems}}\JCR{We need to add refs for these systems}
+\caption{List of systems and its interactions with Calcite.\label{tab:systems}}\todo{Add refs for these systems}
 \end{table*}
 }
 
