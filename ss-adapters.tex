@@ -19,7 +19,7 @@ However, for queries which only touch a small subset of the data in a table, it 
 Fortunately, the same rule-based optimizer can be used to implement adapter-specific rules for optimization.
 For example, suppose a query involves filtering and sorting on a table.
 An adapter which can perform filtering on the backend can implement a rule which matches a \texttt{LogicalFilter} and converts it to the adapter's calling convention.
-This rules converts the \texttt{LogicalFilter} into another \textttt{Filter} instance.
+This rules converts the \texttt{LogicalFilter} into another \texttt{Filter} instance.
 This new \texttt{Filter} node has an associated cost that allows Calcite to optimize queries across adapters.
 This rule will then store the necessary information so that when the request is made to the backend, the adapter will return results which have already been filtered.
 Note that if the adapter does not support sorting, this sorting can still be performed within Calcite.
