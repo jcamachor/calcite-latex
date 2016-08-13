@@ -1,4 +1,30 @@
 \subsection{Schema adapters}
 \label{subsec:adapters}
 
-Some text.
+As discussed in Section~\todo{add reference}, Calcite uses a physical trait to identify relational algebra operators which correspond to a specific database backend.
+These physical operators implement the access paths for the underlying tables in each adapter.
+When a query is parsed and converted to a relational algebra expression, an operator is created for each table representing a scan of the data on that table.
+This represents the minimal interface that an adapter must implement.
+If an adapter implements the table scan operator, the Calcite optimizer is then able to use client side operators such as sorting, filtering, and joins to execute arbitrary SQL queries against these tables.
+
+To implement a table scan, a table exposed by an adapter must first be able convert itself to a relational algebra node.
+This node contains the necessary information the adapter will require to issue he scan to the adapter's backend database.
+The node inherits calling convention of the adapter.
+To extend the functionality provided by adapters, Calcite defines an \emph{enumerable} calling convention.
+Relational algebra nodes with the enumerable calling convention simply operate over tuples which can accessed via an iterator interface.
+This allows Calcite to implement operators which may not be available in each adapter's backend.
+For example, the \texttt{EnmerableJoin} operator implements joins by collecting rows from the iterators of its child nodes and joining on the desired attributes.
+
+However, for queries which only touch a small subset of the data in a table, it is highly inefficient for Calcite to process queries by enumerating all tuples in a table.
+Fortunately, the same rule-based optimizer can be used to implement adapter-specific rules for optimization.
+For example, suppose a query involves filtering and sorting on a table.
+An adapter which can perform filtering on the backend can implement a rule which matches a \texttt{LogicalFilter} and converts it to the adapter's calling convention.
+This rules converts the \texttt{LogicalFilter} into another \textttt{Filter} instance.
+This new \texttt{Filter} node has an associated cost that allows Calcite to optimize queries across adapters.
+This rule will then store the necessary information so that when the request is made to the backend, the adapter will return results which have already been filtered.
+Note that if the adapter does not support sorting, this sorting can still be performed within Calcite.
+
+The use of adapters is a powerful abstraction that allows not only the optimization of queries for a specific backend, but also across multiple backends.
+Calcite is able to answer queries which involve tables across multiple backends by pushing down all possible logic to each backend and then performing joins and aggregations on the resulting data.
+Implementing an adapter can be as simple as providing a table scan operator or can extend to many advanced optimizations.
+Any expression represented in the relational algebra for the query can be pushed down to adapters with optimizer rules.
