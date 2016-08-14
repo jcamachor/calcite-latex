@@ -1,7 +1,7 @@
 \subsection{Schema adapters}
 \label{subsec:adapters}
 
-As discussed in Section~\todo{add reference}, Calcite uses a physical trait to identify relational algebra operators which correspond to a specific database backend.
+As discussed in Section~\ref{subsec:relexprs}, Calcite uses a physical trait to identify relational algebra operators which correspond to a specific database backend.
 These physical operators implement the access paths for the underlying tables in each adapter.
 When a query is parsed and converted to a relational algebra expression, an operator is created for each table representing a scan of the data on that table.
 This represents the minimal interface that an adapter must implement.

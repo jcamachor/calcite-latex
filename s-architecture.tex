@@ -1,7 +1,41 @@
 \section{Architecture}
 \label{sec:archi}
 
-Some text.\todo{Add figure with complete architecture}
+Calcite contains many of the pieces that comprise a typical database management system. However, it omits some key components, \eg storage of data, algorithms to process data, and a repository for storing metadata. This decision is intentional: this makes Calcite an excellent choice for mediating between applications having one or more data storage locations and using multiple data processing engines. It is also a perfect foundation for building your own data processing system.
+
+Figure~\todo{Add figure with complete architecture} outlines the main components of Calcite's architecture.
+
+First of all, Calcite contains a query parser and validator that can translate a SQL query to a tree of relational operators. As we mentioned earlier, Calcite does not contain a \textit{storage layer}. Hence, it provides a mechanism to define table schemas and views using JSON files, so it can be used as a stand-alone system.
+
+The tree of relational operators is the internal representation on which Calcite's optimizer works. The optimization engine consists mainly of three components which guide the process: rewriting rules, metadata providers, and planner engines. We talk about these components in more detail in Section~\ref{subsec:optimizer}.
+
+Once the query has been optimized, Calcite can translate the relational expression back to SQL. Note that this way Calcite can work as stand-alone system on top of any other data processing system with a SQL interface.
+
+However, Calcite architecture is not only tailored towards this way of interacting with the framework. In fact, it is far more common that data applications choose to use their own parser for their own query language. In that case, Calcite also allows to easily build the operator tree directly instantiating the relational operators. Alternately, one can use the built-in \textit{relational expressions builder} interface. For instance, assume that we want to express the following SQL query using the expressions builder:
+
+\begin{lstlisting}[language=SQL]
+SELECT deptno, count(*) AS c, sum(sal) AS s
+FROM emp
+GROUP BY deptno
+HAVING count(*) > 10;
+\end{lstlisting}
+
+The equivalent expression looks as follows:
+
+\begin{lstlisting}[language=Java]
+final RelNode node = builder
+  .scan("EMP")
+  .aggregate(builder.groupKey("DEPTNO"),
+      builder.count(false, "C"),
+      builder.sum(false, "S", builder.field("SAL")))
+  .filter(
+      builder.call(SqlStdOperatorTable.GREATER_THAN,
+          builder.field("C"),
+          builder.literal(10)))
+  .build();
+\end{lstlisting}
+
+Observe that the interface exposes the main constructs for building relational expressions. After the optimization phase is finished, the application can retrieve the optimized relational expression.
 
 \input{ss-dm-ts}
 
@@ -10,5 +44,3 @@ Some text.\todo{Add figure with complete architecture}
 \input{ss-optimizer}
 
 \input{ss-adapters}
-
-\input{ss-streaming}
