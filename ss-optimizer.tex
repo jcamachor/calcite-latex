@@ -1,4 +1,21 @@
 \subsection{Query optimizer}
 \label{subsec:optimizer}
 
-Some text.
+The query optimizer is the main component in the framework. Calcite optimizes queries by repeatedly applying planner rules to a relational expression. A cost model guides the process, and the planner engine tries to generate an alternative expression that has the same semantics as the original but a lower cost.
+
+Every component in the optimizer is extensible. One can add his own relational operators, rewriting rules, cost model, statistics, and even planner engine.
+
+%%
+\myparagraph{Rewriting rules.} Calcite includes a set of planner rules to transform expression trees. In particular, a rules matches a given pattern in the tree and executes a transformation that preserves semantics of that expression. At the moment of this writing, Calcite rules account to more than 75. However, it is rather common that data processing systems that rely for optimization on Calcite include their own rules, \eg\ to explore rewritings especially beneficial in that system.
+
+\todo{Add figure with example of complex rule}
+
+%%
+\myparagraph{Metadata providers.} 
+
+%%
+\myparagraph{Planner engines.} 
+
+%%
+\myparagraph{Materialized views}
+
