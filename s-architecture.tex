@@ -11,7 +11,7 @@ The tree of relational operators is the internal representation on which Calcite
 
 Once the query has been optimized, Calcite can translate the relational expression back to SQL. Note that this way Calcite can work as stand-alone system on top of any data application with a SQL interface.
 
-However, Calcite architecture is not only tailored towards this way of interacting with the framework. In fact, it is far more common that data applications choose to use their own parser for their own query language. In that case, Calcite also allows to easily build the operator tree directly instantiating the relational operators. Alternately, one can use the built-in \textit{relational expressions builder} interface. For instance, assume that we want to express the following SQL query using the expressions builder:
+However, Calcite architecture is not only tailored towards this way of interacting with the framework. In fact, it is far more common that data processing systems choose to use their own parser for their own query language. In that case, Calcite also allows to easily build the operator tree directly instantiating the relational operators. Alternately, one can use the built-in \textit{relational expressions builder} interface. For instance, assume that we want to express the following SQL query using the expressions builder:
 
 \begin{lstlisting}[language=SQL]
 SELECT deptno, count(*) AS c, sum(sal) AS s
