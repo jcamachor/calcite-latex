@@ -9,7 +9,7 @@ First of all, Calcite contains a query parser and validator that can translate a
 
 The tree of relational operators is the internal representation on which Calcite's optimizer works. The optimization engine consists mainly of three components which guide the process: rewriting rules, metadata providers, and planner engines. We talk about these components in more detail in Section~\ref{subsec:optimizer}.
 
-Once the query has been optimized, Calcite can translate the relational expression back to SQL. Note that this way Calcite can work as stand-alone system on top of any other data processing system with a SQL interface.
+Once the query has been optimized, Calcite can translate the relational expression back to SQL. Note that this way Calcite can work as stand-alone system on top of any data application with a SQL interface.
 
 However, Calcite architecture is not only tailored towards this way of interacting with the framework. In fact, it is far more common that data applications choose to use their own parser for their own query language. In that case, Calcite also allows to easily build the operator tree directly instantiating the relational operators. Alternately, one can use the built-in \textit{relational expressions builder} interface. For instance, assume that we want to express the following SQL query using the expressions builder:
 
