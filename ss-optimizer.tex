@@ -3,19 +3,33 @@
 
 The query optimizer is the main component in the framework. Calcite optimizes queries by repeatedly applying planner rules to a relational expression. A cost model guides the process, and the planner engine tries to generate an alternative expression that has the same semantics as the original but a lower cost.
 
-Every component in the optimizer is extensible. One can add his own relational operators, rewriting rules, cost model, statistics, and even planner engine.
+Every component in the optimizer is extensible. One can add his own relational operators, rewriting rules, cost model, and statistics.
 
 %%
-\myparagraph{Rewriting rules.} Calcite includes a set of planner rules to transform expression trees. In particular, a rules matches a given pattern in the tree and executes a transformation that preserves semantics of that expression. At the moment of this writing, Calcite rules account to more than 75. However, it is rather common that data processing systems that rely for optimization on Calcite include their own rules, \eg\ to explore rewritings especially beneficial in that system.
+\myparagraph{Rewriting rules.} Calcite includes a set of planner rules to transform expression trees. In particular, a rule matches a given pattern in the tree and executes a transformation that preserves semantics of that expression. At the moment of this writing, Calcite rules account to more than 75. However, it is rather common that data processing systems that rely for optimization on Calcite include their own rules, \eg\ to explore rewritings especially beneficial in that system.
 
 \todo{Add figure with example of complex rule}
 
 %%
-\myparagraph{Metadata providers.} 
+\myparagraph{Metadata providers.} Calcite provides interfaces that allow data processing systems to plug their metadata information into the framework. Metadata is an important part of Calcite's optimizer, and it meets two main purposes: ($i$)~guiding the planner towards the goal of reducing the overall query plan, and ($ii$)~providing information to the rules while they are being applied. For instance, the metadata providers have functions that return the overall cost of executing a subexpression in the operator tree, the number of rows and the data size of the results of that expression, or the maximum degree of parallelism with which it can be executed. However, they can also provide information about the filter conditions that are present below a certain tree node.
+
+Systems using Calcite can override all the providers methods. However, for many systems it is sufficient to provide statistics about their input data, and Calcite will do the rest of the work by using the default implementation of the providers.
+
+%%Some example?
 
 %%
-\myparagraph{Planner engines.} 
+\myparagraph{Planner engines.} The main goal of a planner engine is to trigger the rules provided to the engine till it reaches a given objective. It is important to note that engines are pluggable in the framework: the set of rules and metadata providers are common to all of them. At this moment, Calcite provides two different engines that try to take all the burden from the user about running the optimization process.
+
+The first one, \textit{a cost-based planner engine}, triggers the input rules with the goal of \textit{reducing the overall expression cost}. The engine uses a dynamic programming algorithm, similar to~\cite{Graefe93thevolcano}, to create and track different alternative plans created by firing the rules given to the engine. The cost model provided through the metadata providers helps the optimizer to ultimately decide which plan to use, as well as pruning the optimization graph to prevent the search space from exploding. Rules can be given in any order to the planner, as the search strategy avoids falling into local minima in the search space that may not be actually optimal.
+
+The second engine is an \textit{exhaustive planner}, which triggers rules exhaustively till it generates an expression that is not modified by any of the rules anymore. This planner is useful to execute rules deterministically in a quick fashion, without taking into account the cost of the expression.
+
+Users may choose to use one of the alternative planner engines depending on their concrete needs, and switching from one to another, in case that their system needs change, is straightforward. Importantly, the existence of two planners allows Calcite users to easily generate \textit{multi-stage optimization} logic, in which different set of rules are applied in consecutive phases of the optimization process. This allows to reduce the overall optimization time by directing the search of different expression plans.
+
 
 %%
 \myparagraph{Materialized views}
+% What are materialized views? Why are they important?
+% What does Calcite include?
 
+Some text.
