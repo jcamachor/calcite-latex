@@ -7,7 +7,7 @@ Figure~\todo{Add figure with complete architecture} outlines the main components
 
 First of all, Calcite contains a query parser and validator that can translate a SQL query to a tree of relational operators. As we mentioned earlier, Calcite does not contain a \textit{storage layer}. Hence, it provides a mechanism to define table schemas and views using JSON files, so it can be used as a stand-alone system.
 
-The tree of relational operators is the internal representation on which Calcite's optimizer works. The optimization engine consists mainly of three components which guide the process: rewriting rules, metadata providers, and planner engines. We talk about these components in more detail in Section~\ref{subsec:optimizer}.
+The tree of relational operators is the internal representation on which Calcite's optimizer works. The optimization engine consists mainly of three components which guide the process: rules, metadata providers, and planner engines. We talk about these components in more detail in Section~\ref{subsec:optimizer}.
 
 Once the query has been optimized, Calcite can translate the relational expression back to SQL. Note that this way Calcite can work as stand-alone system on top of any data application with a SQL interface.
 
