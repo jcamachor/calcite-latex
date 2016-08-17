@@ -1,14 +1,59 @@
 \subsection{Streaming}
 \label{subsec:streaming}
 
-Calcite provides first class support for streaming queries based on a set of streaming specific extensions to standard SQL. The primary extension, the \texttt{STREAM} directive tell the system that the user is interested in incoming records, not existing ones. In the absence of \texttt{STREAM} keyword when querying a stream, the query becomes regular relational query telling system to process existing records in a stream, not the incoming ones. 
+Calcite provides first class support for streaming queries based on a set of streaming specific extensions to standard SQL. The primary extension, the \texttt{STREAM} directive tell the system that the user is interested in incoming records, not existing ones. 
 
-Due to inherently unbounded nature of streams, windowing is used to unblock blocking operators such as aggregates and joins. Calcite's streaming extensions utilise SQL analytic functions to express sliding and cascading window aggregations whereas tumbling, hopping and session windows are enabled by \texttt{TUMBLE}, \texttt{HOPPING}, \texttt{SESSION} functions and related utility functions such as \texttt{TUMBLE\_END}, \texttt{HOP\_END} that can be used respectively in \texttt{GROUP BY} clause and projections. Streaming queries involving window aggregates require the presence of monotonic or quasi-monotonic expression in the \texttt{GROUP BY} clause or in \texttt{ORDER BY} clause in case of sliding and cascading window queries.
+\begin{lstlisting}[style=STREAMINGSQL]
+SELECT @STREAM@ rowtime, productId, units 
+FROM Orders
+WHERE units > 25;
+\end{lstlisting}
 
-Streaming queries involving stream to stream joins can be expressed using an implicit window expression in the \texttt{JOIN} clause. Calcite's query  planner takes care of monotonicity validation of the implicit window expression.
+In the absence of \texttt{STREAM} keyword when querying a stream, the query becomes regular relational query telling system to process existing records in a stream, not the incoming ones. 
+
+Due to inherently unbounded nature of streams, windowing is used to unblock blocking operators such as aggregates and joins. Calcite's streaming extensions utilise SQL analytic functions to express sliding and cascading window aggregations
+
+\begin{lstlisting}[style=STREAMINGSQL]
+SELECT STREAM rowtime,
+  productId,
+  units,
+  SUM(units) @OVER (ORDER BY rowtime@
+  	@PARTITION BY productId@
+  	@RANGE INTERVAL ’1’ HOUR PRECEDING)@ unitsLastHour 
+FROM Orders;
+\end{lstlisting}
+
+whereas tumbling, hopping and session windows are enabled by \texttt{TUMBLE}, \texttt{HOPPING}, \texttt{SESSION} functions and related utility functions such as \texttt{TUMBLE\_END}, \texttt{HOP\_END} that can be used respectively in \texttt{GROUP BY} clause and projections. 
+
+\begin{lstlisting}[style=STREAMINGSQL]
+SELECT STREAM 
+	@TUMBLE_END(rowtime, INTERVAL '1' HOUR)@ AS rowtime,
+  productId,
+  COUNT(*) AS c,
+  SUM(units) AS units
+FROM Orders
+GROUP BY @TUMBLE(rowtime, INTERVAL '1' HOUR)@, productId;
+\end{lstlisting}
+
+Streaming queries involving window aggregates require the presence of monotonic or quasi-monotonic expression in the \texttt{GROUP BY} clause or in \texttt{ORDER BY} clause in case of sliding and cascading window queries.
+
+Streaming queries involving stream to stream joins can be expressed using an implicit window expression in the \texttt{JOIN} clause. 
+
+\begin{lstlisting}[style=STREAMINGSQL]
+SELECT STREAM o.rowtime, o.productId, o.orderId, 
+	s.rowtime AS shipTime
+FROM Orders AS o
+JOIN Shipments AS s
+  ON o.orderId = s.orderId
+  @AND s.rowtime BETWEEN o.rowtime AND@
+  @o.rowtime + INTERVAL '1' HOUR;@
+\end{lstlisting}
+
+Calcite's query  planner takes care of monotonicity validation of the implicit window expression.
 
 
 \MP{Only streaming extensions are discussed above. I think the stream should be defined in the data model section.}
+\MP{Added some examples. We can remove them if space becomes a problem.}
 
 
 Some text~\cite{DBLP:journals/cacm/Hyde10}.

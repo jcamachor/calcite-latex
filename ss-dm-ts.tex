@@ -1,4 +1,11 @@
 \subsection{Data model and type system}
 \label{subsec:dm-ts}
+Calcite's data model consists of three main entities.
 
-Some text.
+\begin{itemize}
+  \item \textbf{Schema} - A schema groups tables, streams, views and materialisations into one logical entity. A schema adapter~\ref{subsec:adapters} can be used to expose particular kind of data (e.g. Cassandra keyspace) as tables within a schema to Calcite.
+  \item \textbf{Table} - A table is a typed collection of records defined by a set of named, strongly typed columns. Records in a table have no defined ordering.
+  \item \textbf{Stream} - A stream is a possibly indefinite sequence of temporally-defined typed records. Each record in a stream should contain at least one monotonic or quasi-monotonic column that defines the order of records temporarily.
+\end{itemize}
+
+\MP{Please feel free to edit above. I am still not sure what we should mention about type system.}
