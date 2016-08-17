@@ -5,8 +5,10 @@ Calcite provides first class support for streaming queries based on a set of str
 
 Due to inherently unbounded nature of streams, windowing is used to unblock blocking operators such as aggregates and joins. Calcite's streaming extensions utilise SQL analytic functions to express sliding and cascading window aggregations whereas tumbling, hopping and session windows are enabled by \texttt{TUMBLE}, \texttt{HOPPING}, \texttt{SESSION} functions and related utility functions such as \texttt{TUMBLE\_END}, \texttt{HOP\_END} that can be used respectively in \texttt{GROUP BY} clause and projections. Streaming queries involving window aggregates require the presence of monotonic or quasi-monotonic expression in the \texttt{GROUP BY} clause or in \texttt{ORDER BY} clause in case of sliding and cascading window queries.
 
-Streaming queries involving stream to stream joins can be expressed using an implicit window expression in the \textt{JOIN} clause. Calcite's query  planner takes care of monotonicity validation of the implicit window expression.
+Streaming queries involving stream to stream joins can be expressed using an implicit window expression in the \texttt{JOIN} clause. Calcite's query  planner takes care of monotonicity validation of the implicit window expression.
 
-Some text~\cite{DBLP:journals/cacm/Hyde10}.
 
 \MP{Only streaming extensions are discussed above. I think the stream should be defined in the data model section.}
+
+
+Some text~\cite{DBLP:journals/cacm/Hyde10}.
