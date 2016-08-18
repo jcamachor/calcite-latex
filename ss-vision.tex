@@ -1,15 +1,19 @@
 \subsection{Apache Calcite vision}
 \label{subsec:vision}
 
-The technical contributions of Calcite:
+%Backed by the ASF
+
+%Used by many systems, Calcite has become the standard
+Over 10~\footnote{\url{http://calcite.apache.org/docs/powered_by}}
+
+We enumerate the main identifying features of the Apache Calcite framework in the following:
 
 \begin{itemize}
-	\item Open source friendly. Being written in Java, with Apache license, in ASF. So is the idea that code is divided into re-usable units (e.g. rules).
-	\item More than one engine (Volcano, Hep) that run off the same rules. You can construct a multi-phase optimization process, using different engines, cost models and sets of traits (physical properties) in each phase. Rules can be re-used across phases (e.g. one phase might pull up projects, another might push them down).
-	\item Streaming, and in particular integration of streaming and non-streaming data.
-	\item The \textit{calling convention} trait, and plans that cross multiple engines. Calling convention is a physical property. And therefore it has a enforcer.
-	\item Support for standard SQL, and also various dialects of SQL (e.g. Oracle SQL), case-sensitivity of identifiers, identifier quoting schemes.
-	\item Avatica JDBC framework
-	\item Metadata caching.
+	\item\textbf{Open source friendly.} Being written in Java, with Apache license, in ASF. So is the idea that code is divided into re-usable units (e.g. rules).
+	\item\textbf{Flexible query optimizer.} More than one engine (Volcano, Hep) that run off the same rules. You can construct a multi-phase optimization process, using different engines, cost models and sets of traits (physical properties) in each phase. Rules can be re-used across phases (e.g. one phase might pull up projects, another might push them down).
+	\item\textbf{Metadata caching.}
+	\item\textbf{Multiple data models support.} Of Streaming, and in particular integration of streaming and non-streaming data.
+	\item\textbf{Cross-platform optimization support.} The \textit{calling convention} trait, and plans that cross multiple engines. Calling convention is a physical property. And therefore it has a enforcer.
+	\item\textbf{Provided Support for standard.} SQL, and also various dialects of SQL (e.g. Oracle SQL), case-sensitivity of identifiers, identifier quoting schemes.
+	\item\textbf{Avatica JDBC framework.}
 \end{itemize}
-

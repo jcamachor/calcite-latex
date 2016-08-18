@@ -1,17 +1,24 @@
 \section{Introduction}
 \label{sec:intro}
 
-The challenge is not only the explosion of data size, but other factors like heterogeneity and velocity are decisive.
-In recent years there has been a Cambrian explosion in the number of data processing systems that deal with these challenges.
-While there might be differences in the processing capabilities of these systems, it is valuable to propose a common layer of abstraction or framework that can integrate and optimize with these systems.
+In the last decade, we have experienced an explosion in the volume, velocity, and heterogeneity of the data produced by individuals and companies through Internet, mobile devices, wearables, \etc\ In parallel, there has been an explosion in the number of data systems used to process this data and extract actionable value from it, usually targeting a rather specific use-case. About a decade ago, Stonebraker and \c{C}etintemel~\cite{DBLP:conf/icde/StonebrakerC05} already predicted that ``one size fits all" was an idea that was coming to an end: that vision seems today more relevant than ever.
 
-Examples:
+As organizations continue investing heavily on creating new data processing systems tailored towards their specific needs, it seems to be valuable to propose a common layer of abstraction or framework that can integrate easily with these systems and aid their optimization. The reason to use such a framework would be many-fold. Among others:
+
 \begin{itemize}
-	\item Integrating in-memory data (and a programming language model like LINQ) with a database-like approach (based on relational algebra).
-	\item Hybrid queries (crossing multiple systems and memory).
-	\item Materialized views, especially for OLAP applications, and especially dynamic (i.e. caching query results or intermediate results, and disabled when segments are flushed out of memory).
+	\item Reducing end-to-end time to create data processing applications with an optimizer at the core. Multiple recent data processing systems that enjoy wide adoption did not include a query optimizer until later in their development~\cite{DBLP:conf/sigmod/ArmbrustXLHLBMK15,DBLP:conf/sigmod/HuaiCGHHOPYL014}. In contrast, integrating with such a framework, developers can focus at first on the processing capabilities of their systems, without sacrificing the benefits that complex query optimization can bring to performance. Furthermore, the optimization logic must not be developed multiple times, but rather consolidated and reused among systems.
+	\item Hiding the complexity of the optimization process. If required, a developer will be able to run query optimization with the toolbox provided in the framework by default. Simultaneously, one should be able to customize the optimization process by being able to develop and plug extensions, \eg custom planners, operators, rules, or providers for metadata information.
+	\item Integrating query languages with different expressive power~\cite{DBLP:journals/cacm/Hyde10,DBLP:conf/sigmod/MeijerBB06}, possibly tailored towards different processing abstractions, within the same formal model based on algebraic expressions on which query optimizations can be applied.
+	\item Enabling cross-platform optimization by exposing a common interface to all the systems. This is an important feature, as the number of data processing systems as well as the need for them to interact with each other will continue increasing. Hence, the optimizer needs to reason globally to improve the performance of data applications, \eg\ making decisions across different backends about materialized view selection.
 \end{itemize}
 
+The idea of having a common framework does not come without challenges. In particular, the framework needs to be extensible and flexible enough to accommodate all the different type of systems integrating with it.
+
+
+%%
 \input{ss-vision}
 
-\input{ss-related}
+
+%%
+\myparagraph{Outline.} The remainder of this paper is organized
+as follows. Section~\ref{sec:archi} presents Calcite's architecture and its main components. In turn, Section~\ref{sec:action} overviews the data processing systems that are already using Calcite. Section~\ref{sec:future} discusses possible future extensions for the framework. Finally, Section~\ref{sec:related} discusses related work, and then we conclude.
