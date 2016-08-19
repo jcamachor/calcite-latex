@@ -22,8 +22,7 @@ However, Calcite architecture is not only tailored towards this fashion of inter
 \begin{lstlisting}[language=SQL]
 SELECT deptno, count(*) AS c, sum(sal) AS s
 FROM emp
-GROUP BY deptno
-HAVING count(*) > 10;
+GROUP BY deptno;
 \end{lstlisting}
 
 The equivalent expression looks as follows:
@@ -34,10 +33,6 @@ final RelNode node = builder
   .aggregate(builder.groupKey("DEPTNO"),
       builder.count(false, "C"),
       builder.sum(false, "S", builder.field("SAL")))
-  .filter(
-      builder.call(SqlStdOperatorTable.GREATER_THAN,
-          builder.field("C"),
-          builder.literal(10)))
   .build();
 \end{lstlisting}
 

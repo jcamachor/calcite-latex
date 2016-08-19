@@ -1,19 +1,15 @@
 \subsection{Apache Calcite vision}
 \label{subsec:vision}
 
-%Backed by the ASF
+In this paper we describe Apache Calcite, a data management framework that aims at meeting the aforementioned goals. The dynamic nature of Calcite comes from its ability to adapt to the requirements of the underlying processing platforms depending on their specific needs. Calcite has enjoyed wide adoption since its inception, and more than a dozen systems widely used in industry already use it to power their query optimization logic~\footnote{\url{http://calcite.apache.org/docs/powered_by}}.
 
-%Used by many systems, Calcite has become the standard
-Over 10~\footnote{\url{http://calcite.apache.org/docs/powered_by}}
-
-We enumerate the main identifying features of the Apache Calcite framework in the following:
+In the following, we enumerate some of the major features of Calcite that have contributed to the wide adoption of the framework.
 
 \begin{itemize}
-	\item\textbf{Open source friendly.} Being written in Java, with Apache license, in ASF. So is the idea that code is divided into re-usable units (e.g. rules).
-	\item\textbf{Flexible query optimizer.} More than one engine (Volcano, Hep) that run off the same rules. You can construct a multi-phase optimization process, using different engines, cost models and sets of traits (physical properties) in each phase. Rules can be re-used across phases (e.g. one phase might pull up projects, another might push them down).
-	\item\textbf{Metadata caching.}
-	\item\textbf{Multiple data models support.} Of Streaming, and in particular integration of streaming and non-streaming data.
-	\item\textbf{Cross-platform optimization support.} The \textit{calling convention} trait, and plans that cross multiple engines. Calling convention is a physical property. And therefore it has a enforcer.
-	\item\textbf{Provided Support for standard.} SQL, and also various dialects of SQL (e.g. Oracle SQL), case-sensitivity of identifiers, identifier quoting schemes.
-	\item\textbf{Avatica JDBC framework.}
+	\item\textbf{Open source friendly.} Calcite is an open-source framework, backed by the Apache Software Foundation (ASF)~\cite{asf:website}, which provides the means to collaboratively develop the project. Furthermore, the software is written in Java, making it easy to interoperate with many of the latest developed data processing systems~\cite{website:Drill,website:Flink,website:Hive,website:Kylin,website:Samza}, especially those in the Hadoop ecosystem.
+	\item\textbf{Multiple data models.} Support for optimization of streaming and non-streaming data processing paradigms integrated within the same abstraction layer.
+	\item\textbf{Flexible query optimizer.} Each component of the optimizer is pluggable and extensible, ranging from rules to cost models. In addition, Calcite includes support for multiple planning engines, making it easy to construct a multi-phase optimization process.
+	\item\textbf{Cross-platform support.} The framework can optimize queries whose execution span across multiple processing systems. Even better, the decision is seamlessly integrated within the optimization logic by representing the system for each operator as a simple physical property.
+	\item\textbf{Reliable and efficient implementation.} Calcite is reliable, as its wide adoption has led to exhaustive testing of the platform. Furthermore, its implementation includes techniques to improve the efficiency of the query optimization process, \eg\ smart caching of metadata information.
+	\item\textbf{Extensions to work out-of-the-box.} Many systems do not provide their own query language, but rather prefer to rely on existing ones. For those, Calcite provides support for standard SQL, as well as various SQL dialects and extensions, \eg\ for expressing queries on streaming or nested data. In addition, Calcite includes a JDBC driver that can be used to easily integrate with the optimization framework.
 \end{itemize}
